@@ -61,9 +61,46 @@ class Avaliacao(models.Model):
     insight_potencia = models.IntegerField(choices=SCORE_CHOICES, verbose_name="Potência de Insights Gerados")
     
     def __str__(self):
-        return f"Availição do {self.fk_avaliado} pelo {self.fk_avaliador}"
+        return f"Availiallos do {self.fk_avaliado} pelo {self.fk_avaliador}"
     
     class Meta:
         verbose_name = 'Availiallos'
         verbose_name_plural = 'Availiallos'
-        ordering = ['-dat_avaliacao']  # Most recent first
+        ordering = ['-dat_avaliacao']  
+
+class Avalioracao(models.Model):
+    pk_avalioracao = models.AutoField(primary_key=True, verbose_name='ID')
+    fk_avaliador = models.ForeignKey(Avaliador, on_delete=models.CASCADE, related_name='Oracao')
+    fk_avaliado = models.ForeignKey(Avaliado, on_delete=models.CASCADE, related_name='Oracao')
+    dat_avaliacao  = models.DateField(verbose_name="Data da Avalicao")
+
+    SCORE_CHOICES = [
+        (-9, '-9'),
+        (-3, '-3'),
+        (-1, '-1'),
+        (0, '0'),
+        (1, '+1'),
+        (3, '+3'),      
+        (9, '+9'),
+    ]
+
+    profundidade = models.IntegerField(choices=SCORE_CHOICES, verbose_name="Profundidade")
+    domínio_vocabular = models.IntegerField(choices=SCORE_CHOICES, verbose_name="Domínio Vocabular")
+    estrutura_didatica = models.IntegerField(choices=SCORE_CHOICES, verbose_name="Estrutura Didática")
+    presenca = models.IntegerField(choices=SCORE_CHOICES, verbose_name="Presença")
+    cultura_repertorio = models.IntegerField(choices=SCORE_CHOICES, verbose_name="Cultura e Repertório")
+    velocidade_ritmo = models.IntegerField(choices=SCORE_CHOICES, verbose_name="Velocidade de Raciocínio e Ritmo de Fala")
+    preparacao = models.IntegerField(choices=SCORE_CHOICES, verbose_name="Esforço / Preparação / Setting")
+    carisma = models.IntegerField(choices=SCORE_CHOICES, verbose_name="Carisma")
+    opi_avaliador = models.IntegerField(choices=SCORE_CHOICES, verbose_name="Opinião do avaliador")
+    contexto = models.IntegerField(choices=SCORE_CHOICES, verbose_name="Contexto")
+    recorte = models.IntegerField(choices=SCORE_CHOICES, verbose_name="Qualidade do Recorte Temático")
+    obs = models.TextField(null=True, blank=True, verbose_name="Observações")
+
+    def __str__(self):
+        return f"Availição do {self.fk_avaliado} pelo {self.fk_avaliador}"
+    
+    class Meta:
+        verbose_name = 'Avaliação de Comunicão Oral'
+        verbose_name_plural = 'Availiações orais'
+        ordering = ['-dat_avaliacao'] 
