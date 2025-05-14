@@ -68,6 +68,7 @@ class Avaliacao(models.Model):
         verbose_name_plural = 'Availiallos'
         ordering = ['-dat_avaliacao']  
 
+
 class Avalioracao(models.Model):
     pk_avalioracao = models.AutoField(primary_key=True, verbose_name='ID')
     fk_avaliador = models.ForeignKey(Avaliador, on_delete=models.CASCADE, related_name='Oracao')
@@ -103,4 +104,4 @@ class Avalioracao(models.Model):
     class Meta:
         verbose_name = 'Avaliação de Comunicão Oral'
         verbose_name_plural = 'Availiações orais'
-        ordering = ['-dat_avaliacao'] 
+        ordering = ['-dat_avaliacao']
