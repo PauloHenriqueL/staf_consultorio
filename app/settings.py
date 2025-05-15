@@ -33,6 +33,11 @@ INSTALLED_APPS = [
     'associado',
 ]
 
+LOGIN_URL = 'login'
+
+LOGIN_REDIRECT_URL = '/'
+LOGOUT_REDIRECT_URL = '/login/'
+
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -48,7 +53,7 @@ ROOT_URLCONF = 'app.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': ['app/templates'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [

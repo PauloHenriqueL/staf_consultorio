@@ -1,28 +1,64 @@
 from rest_framework import generics
-from associado.models import Associado, Setor
-from associado.serializers import AssociadoSerializer, SetorSerializer
-from rest_framework.permissions import IsAuthenticated
-from app.permissions import GlobalDefaultPermission
+from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
+from django.urls import reverse_lazy
+from django.views.generic import ListView, CreateView, DetailView, UpdateView, DeleteView
+from . import models, forms, serializers
 
 
-class AssociadoCreateListView(generics.ListCreateAPIView):
-    permission_classes = (IsAuthenticated, GlobalDefaultPermission,)
-    queryset = Associado.objects.all()
-    serializer_class = AssociadoSerializer
 
 
-class AssociadoRetrieveUpdateDestoyView(generics.RetrieveDestroyAPIView):
-    permission_classes = (IsAuthenticated, GlobalDefaultPermission,)
-    queryset = Associado.objects.all()
-    serializer_class = AssociadoSerializer
+class AssociadoListView(LoginRequiredMixin, PermissionRequiredMixin, ListView):
 
-class SetorCreateListView(generics.ListCreateAPIView):
-    permission_classes = (IsAuthenticated, GlobalDefaultPermission,)
-    queryset = Setor.objects.all()
-    serializer_class = SetorSerializer
+    model = models.Associado
+    template_name = 'associado_list.html'
+    context_object_name = 'associados'
+    paginate_by = 10
+    permission_required = 'associado.view_associado'
+
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        name = self.request.GET.get('nome')
+
+        if name:
+            queryset = queryset.filter(name__icontains=name)
+
+        return queryset
 
 
-class SetorRetrieveUpdateDestoyView(generics.RetrieveDestroyAPIView):
-    permission_classes = (IsAuthenticated, GlobalDefaultPermission,)
-    queryset = Setor.objects.all()
-    serializer_class = SetorSerializer
+class AssociadoCreateView(LoginRequiredMixin, PermissionRequiredMixin, CreateView):
+    model = models.Associado
+    template_name = 'associado_create.html'
+    form_class = forms.AssociadoForm
+    success_url = reverse_lazy('associado-list')
+    permission_required = 'associado.add_associado'
+
+
+class AssociadoDetailView(LoginRequiredMixin, PermissionRequiredMixin, DetailView):
+    model = models.Associado
+    template_name = 'associado_detail.html'
+    permission_required = 'associado.view_associado'
+
+
+class AssociadoUpdateView(LoginRequiredMixin, PermissionRequiredMixin, UpdateView):
+    model = models.Associado
+    template_name = 'associado_update.html'
+    form_class = forms.AssociadoForm
+    success_url = reverse_lazy('associado-list')
+    permission_required = 'associado.change_associado'
+
+
+class AssociadoDeleteView(LoginRequiredMixin, PermissionRequiredMixin, DeleteView):
+    model = models.Associado
+    template_name = 'associado_delete.html'
+    success_url = reverse_lazy('associado-list')
+    permission_required = 'associado.delete_associado'
+
+
+class AssociadoCreateListAPIView(generics.ListCreateAPIView):
+    queryset = models.Associado.objects.all()
+    serializer_class = serializers.AssociadoSerializer
+
+
+class AssociadoRetrieveUpdateDestroyAPIView(generics.RetrieveUpdateDestroyAPIView):
+    queryset = models.Associado.objects.all()
+    serializer_class = serializers.AssociadoSerializer

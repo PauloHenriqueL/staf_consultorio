@@ -63,6 +63,16 @@ class Avaliacao(models.Model):
     def __str__(self):
         return f"Availiallos do {self.fk_avaliado} pelo {self.fk_avaliador}"
     
+    def get_avg_score(self):
+        """Calcula a pontuação média de todos os critérios de avaliação"""
+        scores = [
+            self.estagio_mudanca, self.estrutura, self.encerramento, 
+            self.acolhimento, self.seguranca_terapeuta, self.seguranca_metodo,
+            self.aprofundar, self.hipoteses, self.interpretativa,
+            self.frase_timing, self.corpo_setting, self.insight_potencia
+        ]
+        return sum(scores) / len(scores)
+    
     class Meta:
         verbose_name = 'Availiallos'
         verbose_name_plural = 'Availiallos'
