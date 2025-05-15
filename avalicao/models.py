@@ -13,6 +13,7 @@ class Avaliador(models.Model):
         return self.nome
     
     class Meta:
+        db_table = '"staff"."avaliador"'
         verbose_name = 'Avaliador'
         verbose_name_plural = 'Avaliadores'
 
@@ -27,6 +28,7 @@ class Avaliado(models.Model):
         return self.nome
     
     class Meta:
+        db_table = '"staff"."avaliado"'
         verbose_name = 'Avaliado'
         verbose_name_plural = 'Avaliados'
 
@@ -74,6 +76,7 @@ class Avaliacao(models.Model):
         return sum(scores) / len(scores)
     
     class Meta:
+        db_table = '"staff"."avaliacao"'
         verbose_name = 'Availiallos'
         verbose_name_plural = 'Availiallos'
         ordering = ['-dat_avaliacao']  
@@ -112,6 +115,7 @@ class Avalioracao(models.Model):
         return f"Availição do {self.fk_avaliado} pelo {self.fk_avaliador}"
     
     class Meta:
+        db_table = '"staff"."avalioracao"'
         verbose_name = 'Avaliação de Comunicão Oral'
         verbose_name_plural = 'Availiações orais'
         ordering = ['-dat_avaliacao']

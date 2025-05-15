@@ -7,15 +7,17 @@ from dotenv import load_dotenv
 from urllib.parse import urlparse
 
 
+load_dotenv()
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+SECRET_KEY = os.getenv('SECRET_KEY')
+DEBUG = os.environ.get('DEBUG', 'True') == 'True'
 
-SECRET_KEY = 'django-insecure--65m@n#f$_er)z6eae4cp#c1*tur2^9tgi**+!)6rj&#hl1g@v'
+ALLOWED_HOSTS = ['localhost', '127.0.0.1', '.onrender.com']
 
-
-DEBUG = True
-
-ALLOWED_HOSTS = []
+RENDER_EXTERNAL_HOSTNAME = os.environ.get('RENDER_EXTERNAL_HOSTNAME')
+if RENDER_EXTERNAL_HOSTNAME:
+    ALLOWED_HOSTS.append(RENDER_EXTERNAL_HOSTNAME)
 
 
 INSTALLED_APPS = [
@@ -45,6 +47,7 @@ MIDDLEWARE = [
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
@@ -65,13 +68,21 @@ TEMPLATES = [
     },
 ]
 
+
+DATABASE_URL = os.environ.get('DATABASE_URL')
+
 WSGI_APPLICATION = 'app.wsgi.application'
+tmpPostgres = urlparse(os.environ.get("DATABASE_URL"))
 
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': tmpPostgres.path.replace('/', ''),
+        'USER': tmpPostgres.username,
+        'PASSWORD': tmpPostgres.password,
+        'HOST': tmpPostgres.hostname,
+        'PORT': 5432,
     }
 }
 
@@ -100,6 +111,10 @@ USE_I18N = True
 USE_TZ = True
 
 STATIC_URL = 'static/'
+
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
