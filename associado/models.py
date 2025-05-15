@@ -54,6 +54,7 @@ class Setor(models.Model):
         return self.setor
 
     class Meta:
+        db_table = '"staff"."setor"'
         verbose_name = "Setor"
         verbose_name_plural = "Setores"
 
@@ -99,6 +100,7 @@ class Associado(models.Model):
     updated_at = models.DateTimeField(auto_now=True, verbose_name="Data de Atualização")
 
     class Meta:
+        db_table = '"staff"."associado"'
         ordering = ['nome']
         verbose_name = "Associado"
         verbose_name_plural = "Associados"
